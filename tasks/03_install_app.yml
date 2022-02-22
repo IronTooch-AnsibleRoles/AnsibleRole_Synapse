@@ -1,28 +1,42 @@
 ---
-- name: Create my_app directory
-  ansible.builtin.file:
-    path: "{{ my_app_dir }}"
-    state: directory
-    owner: "{{ my_app_service_user }}"
-    group: "{{ my_app_service_user }}"
-    mode: '700'
+- name: Install Synapse
+  ansible.builtin.apt:
+    name: matrix-synapse-py3
+    state: present
+    update_cache: true
+    force: false
+  register: apt_status
+  until: apt_status is success
+  delay: 6
+  retries: 10
 
-- name: Get Installer
-  ansible.builtin.get_url:
-    url: "{{ my_app_url }}"
-    dest: "{{ my_app_dir }}/{{ my_app_install_program }}"
-    force: true
-    owner: "{{ my_app_service_user }}"
-    group: "{{ my_app_service_user }}"
-    mode: "0700"
-    validate_certs: "true"
 
-- name: Install my_app
-  become_user: "{{ my_app_service_user }}"
-  ansible.builtin.expect:
-    command: "{{ my_app_install_command }}"
-    chdir: "{{ my_app_dir }}"
-    creates: "{{ my_app_install_artifact }}"
-    responses:
-      Question 1 String: "{{ external_domain }}"
-      Question 2 String: "n"
+# UTF8 for Postgres
+
+# - name: Create synapse directory
+#   ansible.builtin.file:
+#     path: "{{ synapse_dir }}"
+#     state: directory
+#     owner: "{{ synapse_service_user }}"
+#     group: "{{ synapse_service_user }}"
+#     mode: '700'
+
+# - name: Get Installer
+#   ansible.builtin.get_url:
+#     url: "{{ synapse_url }}"
+#     dest: "{{ synapse_dir }}/{{ synapse_install_program }}"
+#     force: true
+#     owner: "{{ synapse_service_user }}"
+#     group: "{{ synapse_service_user }}"
+#     mode: "0700"
+#     validate_certs: "true"
+
+# - name: Install synapse
+#   become_user: "{{ synapse_service_user }}"
+#   ansible.builtin.expect:
+#     command: "{{ synapse_install_command }}"
+#     chdir: "{{ synapse_dir }}"
+#     creates: "{{ synapse_install_artifact }}"
+#     responses:
+#       Question 1 String: "{{ external_domain }}"
+#       Question 2 String: "n"

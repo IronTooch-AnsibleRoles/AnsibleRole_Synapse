@@ -5,4 +5,32 @@
       - acl
       - sudo
       - python3-pexpect
+      - lsb-release 
+      - wget 
+      - apt-transport-https
+      - build-essential
+      - python3-dev
+      - libffi-dev
+      - python3-pip
+      - python3-setuptools
+      - libpq5
+      - libssl-dev
+      - virtualenv
+      - libjpeg-dev
+      - libxslt1-dev
     state: present
+
+- name: Install Matrix Key
+  ansible.builtin.apt_key:
+    url: "{{ synapse_gpg_key }}"
+    state: present
+    validate_certs: true
+    keyring: "{{ synapse_gpg_keyring }}"
+
+- name: Install Matrix Repository
+  ansible.builtin.apt_repository:
+    repo: "{{ synapse_repo }}"
+    state: present
+    update_cache: true
+    validate_certs: true
+    filename: "{{ synapse_name }}.list"
