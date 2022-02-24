@@ -6,13 +6,20 @@ synapse_tld: "example.com"
 # Needed for Installation of Package
 synapse_repo: "deb https://packages.matrix.org/debian/ focal main"
 synapse_gpg_key: "https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg"
+synapse_gpg_keyring_root: "/usr/share/keyrings"
 synapse_gpg_keyring: "{{ synapse_name }}_keyring"
 
 # Needed for Operating the Service
-synapse_service_usesr: "{{ synapse_name }}_user"
+synapse_service_user: "matrix-synapse"
 synapse_dir: "/opt/{{ synapse_name }}"
+synapse_config_dir: "/etc/matrix-synapse/conf.d/"
 
-# Items for operating teh Service`
+synapse_default_macaroon_secret_key: ""
+synapse_default_form_secret_key: ""
+synapse_default_registration_shared_secret: ""
+
+# Items for operating the Service`
+synapse_service_path: "/lib/systemd/system/matrix-synapse.service"
 synapse_install_program: "./install.sh"
 synapse_refresh_command: "{{ synapse_dir }}/refresh.sh"
 synapse_install_command: "./{{ synapse_install_program }} my_option"

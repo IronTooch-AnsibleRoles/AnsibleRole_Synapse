@@ -1,5 +1,14 @@
 ---
-# tasks file for zz_app
+- name: Print Postgres Username
+  ansible.builtin.debug:
+    msg: "DB User: {{ postgres_dbuser }}"
+    verbosity: 0
+
+- name: Print Postgres Password
+  ansible.builtin.debug:
+    msg: "DB Password: {{ postgres_dbpw }}"
+    verbosity: 0
+
 - name: Install dependencies
   ansible.builtin.include_tasks:
     file: "01_install_dependencies.yml"
@@ -12,9 +21,9 @@
   ansible.builtin.include_tasks:
     file: "03_install_app.yml"
 
-# - name: Configure Environment
-#   ansible.builtin.include_tasks:
-#     file: "04_configure_app.yml"
+- name: Configure Environment
+  ansible.builtin.include_tasks:
+    file: "04_configure_app.yml"
 
 # - name: Deploy Services and Handle SSL
 #   ansible.builtin.include_tasks:

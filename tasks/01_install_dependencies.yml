@@ -24,8 +24,6 @@
   ansible.builtin.apt_key:
     url: "{{ synapse_gpg_key }}"
     state: present
-    validate_certs: true
-    keyring: "{{ synapse_gpg_keyring }}"
 
 - name: Install Matrix Repository
   ansible.builtin.apt_repository:

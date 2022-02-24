@@ -1,24 +1,60 @@
 ---
-- name: Edit synapse file already deployed
-  ansible.builtin.replace:
-    path: "{{ synapse_installed_config_file }}"
-    regexp: "server_name: \"SERVERNAME\""
-    replace: "server_name: \"{{ synapse_tld }}\""
+
+
+- name: Set Macaroon Secret Key since it was provided
+  ansible.builtin.set_fact:
+    synapse_macaroon_secret_key: "{{ synapse_default_macaroon_secret_key }}"
+  when: synapse_default_macaroon_secret_key
+  no_log: true
+
+- name: Create Macaroon Secret Key since it was not provided
+  ansible.builtin.set_fact:
+    synapse_macaroon_secret_key: "{{ lookup('community.general.random_string', length=24, special=false) }}"
+  when: not synapse_default_macaroon_secret_key
+  no_log: true
+
+- name: Set Form Key since it was provided
+  ansible.builtin.set_fact:
+    synapse_form_secret_key: "{{ synapse_default_form_secret_key }}"
+  when: synapse_default_form_secret_key
+  no_log: true
+
+- name: Create Form Key since it was not provided
+  ansible.builtin.set_fact:
+    synapse_form_secret_key: "{{ lookup('community.general.random_string', length=24, special=false) }}"
+  when: not synapse_default_form_secret_key
+  no_log: true
+
+- name: Set synapse_registration_shared_secret since it was provided
+  ansible.builtin.set_fact:
+    synapse_registration_shared_secret: "{{ synapse_default_registration_shared_secret }}"
+  when: synapse_default_registration_shared_secret
+  no_log: true
+
+- name: Create synapse_registration_shared_secret since it was not provided
+  ansible.builtin.set_fact:
+    synapse_registration_shared_secret: "{{ lookup('community.general.random_string', length=24, special=false) }}"
+  when: not synapse_default_registration_shared_secret
+  no_log: true
+
+- name: Template server settings
+  ansible.builtin.template:
+    src: ./synapse_configs/{{ item }}.yaml.j2
+    dest: "{{ synapse_config_dir }}/{{ item }}.yaml"
+    force: true
     owner: "{{ synapse_service_user }}"
     group: "{{ synapse_service_user }}"
-    mode: '0700'
+    mode: '0770'
+  loop:
+    - server_name
+    - report_stats
+    - listeners
+    - database
+    - api_config
+    - registration
 
-# - name: Deploy fresh app config file
-#   ansible.builtin.template:
-#     src: "{{ synapse_deployed_config_file }}"
-#     dest: "{{ synapse_dir }}/CONFIG_PATH"
-#     force: true
-#     mode: '0700'  # Ansible-Lint hates when this isn't set
-
-# - name: Own all of the synapse folder
-#   ansible.builtin.file:
-#     path: "{{ synapse_dir }}"
-#     state: directory
-#     recurse: true
-#     owner: '{{ synapse_service_user }}'
-#     group: '{{ synapse_service_user }}'
+- name: Ensure matrix-synapse is restarted
+  ansible.builtin.service:
+    name: matrix-synapse
+    state: restarted
+    enabled: true

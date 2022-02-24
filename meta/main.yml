@@ -1,8 +1,8 @@
 galaxy_info:
-  role_name: my_role
+  role_name: synapse
   namespace: irontooch
   author: IronTooch
-  description: App_Description
+  description: Installs Matrix Synapse Server
   license: GPL-3.0-only
   min_ansible_version: 2.1
 
@@ -14,4 +14,8 @@ galaxy_info:
   galaxy_tags: []
 
 dependencies:
-  - roles: irontooch.postgresql
+  - role: irontooch.postgresql
+    vars:
+      postgres_app_name: "{{ synapse_name }}"
+      postgres_db_lc_collate: "C"
+      postgres_db_lc_ctype: "C"

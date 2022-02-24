@@ -1,0 +1,71 @@
+
+# List of ports that Synapse should listen on, their purpose and their
+# configuration.
+#
+# Options for each listener include:
+#
+#   port: the TCP port to bind to
+#
+#   bind_addresses: a list of local addresses to listen on. The default is
+#       'all local interfaces'.
+#
+#   type: the type of listener. Normally 'http', but other valid options are:
+#       'manhole' (see https://matrix-org.github.io/synapse/latest/manhole.html),
+#       'metrics' (see https://matrix-org.github.io/synapse/latest/metrics-howto.html),
+#       'replication' (see https://matrix-org.github.io/synapse/latest/workers.html).
+#
+#   tls: set to true to enable TLS for this listener. Will use the TLS
+#       key/cert specified in tls_private_key_path / tls_certificate_path.
+#
+#   x_forwarded: Only valid for an 'http' listener. Set to true to use the
+#       X-Forwarded-For header as the client IP. Useful when Synapse is
+#       behind a reverse-proxy.
+#
+#   resources: Only valid for an 'http' listener. A list of resources to host
+#       on this port. Options for each resource are:
+#
+#       names: a list of names of HTTP resources. See below for a list of
+#           valid resource names.
+#
+#       compress: set to true to enable HTTP compression for this resource.
+#
+#   additional_resources: Only valid for an 'http' listener. A map of
+#        additional endpoints which should be loaded via dynamic modules.
+#
+# Valid resource names are:
+#
+#   client: the client-server API (/_matrix/client), and the synapse admin
+#       API (/_synapse/admin). Also implies 'media' and 'static'.
+#
+#   consent: user consent forms (/_matrix/consent).
+#       See https://matrix-org.github.io/synapse/latest/consent_tracking.html.
+#
+#   federation: the server-server API (/_matrix/federation). Also implies
+#       'media', 'keys', 'openid'
+#
+#   keys: the key discovery API (/_matrix/keys).
+#
+#   media: the media API (/_matrix/media).
+#
+#   metrics: the metrics interface.
+#       See https://matrix-org.github.io/synapse/latest/metrics-howto.html.
+#
+#   openid: OpenID authentication.
+#
+#   replication: the HTTP replication API (/_synapse/replication).
+#       See https://matrix-org.github.io/synapse/latest/workers.html.
+#
+#   static: static resources under synapse/static (/_matrix/static). (Mostly
+#       useful for 'fallback authentication'.)
+#
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['::1', '0.0.0.0']
+
+    resources:
+      - names: [client, federation]
+        compress: false

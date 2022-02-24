@@ -9,34 +9,3 @@
   until: apt_status is success
   delay: 6
   retries: 10
-
-
-# UTF8 for Postgres
-
-# - name: Create synapse directory
-#   ansible.builtin.file:
-#     path: "{{ synapse_dir }}"
-#     state: directory
-#     owner: "{{ synapse_service_user }}"
-#     group: "{{ synapse_service_user }}"
-#     mode: '700'
-
-# - name: Get Installer
-#   ansible.builtin.get_url:
-#     url: "{{ synapse_url }}"
-#     dest: "{{ synapse_dir }}/{{ synapse_install_program }}"
-#     force: true
-#     owner: "{{ synapse_service_user }}"
-#     group: "{{ synapse_service_user }}"
-#     mode: "0700"
-#     validate_certs: "true"
-
-# - name: Install synapse
-#   become_user: "{{ synapse_service_user }}"
-#   ansible.builtin.expect:
-#     command: "{{ synapse_install_command }}"
-#     chdir: "{{ synapse_dir }}"
-#     creates: "{{ synapse_install_artifact }}"
-#     responses:
-#       Question 1 String: "{{ external_domain }}"
-#       Question 2 String: "n"
