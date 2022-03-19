@@ -1,6 +1,4 @@
 ---
-
-
 - name: Set Macaroon Secret Key since it was provided
   ansible.builtin.set_fact:
     synapse_macaroon_secret_key: "{{ synapse_default_macaroon_secret_key }}"
@@ -37,6 +35,15 @@
   when: not synapse_default_registration_shared_secret
   no_log: true
 
+- name: Get Postgres user pass
+  ansible.builtin.slurp:
+    src: "{{ synapse_postgres_pass_path }}"
+  register: postgres_user_pass_var
+
+- name: Set Postgres Password
+  ansible.builtin.set_fact:
+    synapse_postgres_dbpw: "{{ postgres_user_pass_var['content'] | b64decode }}"
+
 - name: Template server settings
   ansible.builtin.template:
     src: ./synapse_configs/{{ item }}.yaml.j2
@@ -46,12 +53,29 @@
     group: "{{ synapse_service_user }}"
     mode: '0770'
   loop:
-    - server_name
+    - 01_modules
+    - 02_server_name
+    - 03_homeserver_blocking
+    - 04_tls
+    - 05_federation
+    - 06_caching
+    - 07_database
+    - 08_logging
+    - 09_ratelimiting
+    - 10_media_store
+    - 11_captcha
+    - 12_turn
+    - 13_registration
+    - 14_metrics
+    - 15_api_config
+    - 16_signing_keys
+    - 17_sso_integration
+    - 18_push
+    - 19_0_rooms
+    - 19_1_listeners
+    - 20_opentracing
+    - 21_workers
     - report_stats
-    - listeners
-    - database
-    - api_config
-    - registration
 
 - name: Ensure matrix-synapse is restarted
   ansible.builtin.service:

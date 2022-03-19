@@ -1,0 +1,46 @@
+## Homeserver blocking ##
+
+#admin_contact: 'mailto:admin@server.com'
+#hs_disabled: false
+#hs_disabled_message: 'Human readable reason for why the HS is blocked'
+#limit_usage_by_mau: false
+#max_mau_value: 50
+#mau_trial_days: 2
+#mau_limit_alerting: false
+#mau_stats_only: false
+#mau_limit_reserved_threepids:
+#  - medium: 'email'
+#    address: 'reserved_user@example.com'
+#server_context: context
+
+limit_remote_rooms:
+
+  #enabled: true
+  #complexity: 0.5
+  #complexity_error: "This room is too complex."
+  #admins_can_join: true
+#require_membership_for_aliases: false
+#allow_per_room_profiles: false
+#max_avatar_size: 10M
+#allowed_avatar_mimetypes: ["image/png", "image/jpeg", "image/gif"]
+#redaction_retention_period: 28d
+#user_ips_max_age: 14d
+#request_token_inhibit_3pid_errors: true
+#next_link_domain_whitelist: ["matrix.org"]
+
+templates:
+  #custom_template_directory: /path/to/custom/templates/
+
+retention:
+  #enabled: true
+  #default_policy:
+  #  min_lifetime: 1d
+  #  max_lifetime: 1y
+  #allowed_lifetime_min: 1d
+  #allowed_lifetime_max: 1y
+  #purge_jobs:
+  #  - longest_max_lifetime: 3d
+  #    interval: 12h
+  #  - shortest_max_lifetime: 3d
+  #    interval: 1d
+

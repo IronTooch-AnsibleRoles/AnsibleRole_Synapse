@@ -1,0 +1,84 @@
+## Media Store ##
+
+
+#enable_media_repo: false
+
+media_store_path: "{{ synapse_data_dir }}/media"
+
+#media_storage_providers:
+#  - module: file_system
+#    store_local: false
+#    store_remote: false
+#    store_synchronous: false
+#    config:
+#       directory: /mnt/some/other/directory
+
+max_upload_size: 500M
+#max_image_pixels: 32M
+
+#dynamic_thumbnails: false
+
+#thumbnail_sizes:
+#  - width: 32
+#    height: 32
+#    method: crop
+#  - width: 96
+#    height: 96
+#    method: crop
+#  - width: 320
+#    height: 240
+#    method: scale
+#  - width: 640
+#    height: 480
+#    method: scale
+#  - width: 800
+#    height: 600
+#    method: scale
+
+url_preview_enabled: true
+
+url_preview_ip_range_blacklist:
+  - '127.0.0.0/8'
+  - '10.0.0.0/8'
+  - '172.16.0.0/12'
+  - '192.168.0.0/16'
+  - '100.64.0.0/10'
+  - '192.0.0.0/24'
+  - '169.254.0.0/16'
+  - '192.88.99.0/24'
+  - '198.18.0.0/15'
+  - '192.0.2.0/24'
+  - '198.51.100.0/24'
+  - '203.0.113.0/24'
+  - '224.0.0.0/4'
+  - '::1/128'
+  - 'fe80::/10'
+  - 'fc00::/7'
+  - '2001:db8::/32'
+  - 'ff00::/8'
+  - 'fec0::/10'
+
+#url_preview_ip_range_whitelist:
+#   - '192.168.1.1'
+
+#url_preview_url_blacklist:
+#  - username: '*'
+#  - netloc: 'google.com'
+#  - netloc: '*.google.com'
+#  - scheme: 'http'
+#  - netloc: 'www.acme.com'
+#    path: '/foo'
+#  - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+
+#max_spider_size: 10M
+
+url_preview_accept_language:
+#   - en
+
+oembed:
+  #disable_default_providers: true
+  #additional_providers:
+  #  - oembed/my_providers.json
+
+
+

@@ -1,13 +1,132 @@
 ---
+- name: Install Nginx
+  ansible.builtin.package:
+    name:
+      - nginx
+    state: present
+  register: apt_status
+  until: apt_status is success
+  delay: 6
+  retries: 10
 
-# Get latest release
+- name: Make Element Directory
+  ansible.builtin.file:
+    path: "{{ element_dir }}"
+    state: directory
+    group: "{{ nginx_user }}"
+    owner: "{{ nginx_user }}"
+    mode: '0755'
+
+- name: Get Github Latest Release asset
+  block:
+    - name: Set fact for API target for Element Web
+      ansible.builtin.set_fact:
+        element_github_api: "https://api.github.com/repos/{{ element_repo }}/releases/latest"
+
+    - name: Get the latest tag from Github for Element Web
+      ansible.builtin.uri:
+        url: "{{ element_github_api }}"
+      register: latest_release
+
+    - name: Print debug message
+      ansible.builtin.debug:
+        msg: "{{ latest_release }}"
+        verbosity: 0
+
+    - name: Print latest release details for Element Web
+      ansible.builtin.debug:
+        msg: |
+          Release name: {{ latest_release.json.name }}
+          Release tag: {{ latest_release.json.tag_name }}
+
+    - name: Set variable for latest release tag
+      set_fact:
+        latest_release_tag: "{{ latest_release.json.tag_name }}"
+
+    - name: Set variable for latest release tag without 'v'
+      set_fact:
+        latest_release_semver: "{{ latest_release_tag | replace('v','') }}"
+  when: not element_github_version
+
+- name: Set release version to user defined value
+  ansible.builtin.set_fact:
+    release_version: "{{ element_github_version }}"
+  when: element_github_version
+
+- name: Set release version to lastest version
+  ansible.builtin.set_fact:
+    release_version: "{{ latest_release_tag }}"
+  when: not element_github_version
+
+- name: Download release
+  ansible.builtin.get_url:
+    url: "https://github.com/{{ element_repo }}/releases/download/{{ release_version }}/element-{{ latest_release_tag }}.tar.gz"
+    dest: "{{ element_tmp_path }}"
+
+- name: Set temporary folder target
+  ansible.builtin.set_fact:
+    element_tmp_folder: "/tmp/element-{{ release_version }}/"
+
+- name: Unzip element-web
+  ansible.builtin.unarchive:
+    src: "{{ element_tmp_path }}"
+    dest: "/tmp/"
+    remote_src: true
+    # creates: "created_file"
+
+- name: Remove zip file
+  ansible.builtin.file:
+    path: "{{ element_tmp_path }}"
+    state: absent
+
+- name: Copy the content from the unzipped folder
+  ansible.builtin.copy:
+    src: "{{ element_tmp_folder }}"
+    dest: "/opt/element"
+    remote_src: true
+    force: true
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: "0700"
+
+- name: Remove zip file
+  ansible.builtin.file:
+    path: "{{ element_tmp_folder }}"
+    state: absent
+
+- name: Setup Element Configs
+  block:
+
+    - name: Copy Config file
+      ansible.builtin.copy:
+        src: "{{ element_config_base_file }}"
+        dest: "{{ element_config_file }}"
+        remote_src: true
+        force: true
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+        mode: "0700"
+
+    - name: Fix base url
+      ansible.builtin.replace:
+        path: "{{ element_config_file }}"
+        regexp: '"base_url": "https://matrix-client.matrix.org",'
+        replace: ""base_url": "https://matrix-client.matrix.org","
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+        mode: '0770'
+
+- name: Install Nginx Config
+  ansible.builtin.template:
+    src: ./element_connfigs/nginx_element.conf.j2
+    dest: /etc/nginx/sites-enabled/element
+    force: true
+    mode: '0770'
+  notify: "Restart Nginx"
+
 
 # Edit config.json
 
 # Chown as needed
-
-# Install Nginx
-
-# Make Nginx Config
 
 # Restart Nginx

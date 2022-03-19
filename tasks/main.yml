@@ -25,6 +25,10 @@
   ansible.builtin.include_tasks:
     file: "04_configure_app.yml"
 
+- name: Install Element
+  ansible.builtin.include_tasks:
+    file: "07_add_element.yml"
+
 # - name: Deploy Services and Handle SSL
 #   ansible.builtin.include_tasks:
 #     file: "05_deploy_services.yml"

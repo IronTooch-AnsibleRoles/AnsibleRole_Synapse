@@ -1,0 +1,70 @@
+
+## API Configuration ##
+
+# Controls for the state that is shared with users who receive an invite
+# to a room
+#
+room_prejoin_state:
+   # By default, the following state event types are shared with users who
+   # receive invites to the room:
+   #
+   # - m.room.join_rules
+   # - m.room.canonical_alias
+   # - m.room.avatar
+   # - m.room.encryption
+   # - m.room.name
+   # - m.room.create
+   # - m.room.topic
+   #
+   # Uncomment the following to disable these defaults (so that only the event
+   # types listed in 'additional_event_types' are shared). Defaults to 'false'.
+   #
+   #disable_default_event_types: true
+
+   # Additional state event types to share with users when they are invited
+   # to a room.
+   #
+   # By default, this list is empty (so only the default event types are shared).
+   #
+   #additional_event_types:
+   #  - org.example.custom.event.type
+
+# We record the IP address of clients used to access the API for various
+# reasons, including displaying it to the user in the "Where you're signed in"
+# dialog.
+#
+# By default, when puppeting another user via the admin API, the client IP
+# address is recorded against the user who created the access token (ie, the
+# admin user), and *not* the puppeted user.
+#
+# Uncomment the following to also record the IP address against the puppeted
+# user. (This also means that the puppeted user will count as an "active" user
+# for the purpose of monthly active user tracking - see 'limit_usage_by_mau' etc
+# above.)
+#
+#track_puppeted_user_ips: true
+
+
+# A list of application service config files to use
+#
+#app_service_config_files:
+#  - app_service_1.yaml
+#  - app_service_2.yaml
+
+# Uncomment to enable tracking of application service IP addresses. Implicitly
+# enables MAU tracking for application service users.
+#
+#track_appservice_user_ips: true
+
+
+# a secret which is used to sign access tokens. If none is specified,
+# the registration_shared_secret is used, if one is given; otherwise,
+# a secret key is derived from the signing key.
+#
+macaroon_secret_key: {{ synapse_macaroon_secret_key }}
+
+# a secret which is used to calculate HMACs for form values, to stop
+# falsification of values. Must be specified for the User Consent
+# forms to work.
+#
+form_secret: {{ synapse_form_secret_key }}

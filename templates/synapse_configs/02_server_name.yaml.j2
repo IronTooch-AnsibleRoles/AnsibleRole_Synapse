@@ -1,0 +1,53 @@
+## Server ##
+
+server_name: {{ synapse_tld }}
+pid_file: "/var/run/matrix-synapse.pid"
+#web_client_location: https://riot.example.com/
+#public_baseurl: https://example.com/
+#serve_server_wellknown: true
+#soft_file_limit: 0
+presence:
+  #enabled: false
+#require_auth_for_profile_requests: true
+#limit_profile_requests_to_users_who_share_rooms: true
+#include_profile_data_on_invite: false
+#allow_public_rooms_without_auth: true
+#allow_public_rooms_over_federation: true
+#default_room_version: "6"
+#gc_thresholds: [700, 10, 10]
+#gc_min_interval: [0.5s, 30s, 1m]
+#filter_timeline_limit: 5000
+#block_non_admin_invites: true
+#enable_search: false
+
+#ip_range_blacklist:
+#  - '127.0.0.0/8'
+#  - '10.0.0.0/8'
+#  - '172.16.0.0/12'
+#  - '192.168.0.0/16'
+#  - '100.64.0.0/10'
+#  - '192.0.0.0/24'
+#  - '169.254.0.0/16'
+#  - '192.88.99.0/24'
+#  - '198.18.0.0/15'
+#  - '192.0.2.0/24'
+#  - '198.51.100.0/24'
+#  - '203.0.113.0/24'
+#  - '224.0.0.0/4'
+#  - '::1/128'
+#  - 'fe80::/10'
+#  - 'fc00::/7'
+#  - '2001:db8::/32'
+#  - 'ff00::/8'
+#  - 'fec0::/10'
+
+#ip_range_whitelist:
+#   - '192.168.1.1'
+
+manhole_settings:
+  #username: manhole
+  #password: mypassword
+  #ssh_priv_key_path: CONFDIR/id_rsa
+  #ssh_pub_key_path: CONFDIR/id_rsa.pub
+
+#dummy_events_threshold: 5

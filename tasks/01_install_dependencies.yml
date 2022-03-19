@@ -5,8 +5,8 @@
       - acl
       - sudo
       - python3-pexpect
-      - lsb-release 
-      - wget 
+      - lsb-release
+      - wget
       - apt-transport-https
       - build-essential
       - python3-dev
@@ -18,6 +18,9 @@
       - virtualenv
       - libjpeg-dev
       - libxslt1-dev
+      - libxml2-dev
+      - redis-server
+      - nginx
     state: present
 
 - name: Install Matrix Key

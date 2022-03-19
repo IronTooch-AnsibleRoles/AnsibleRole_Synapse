@@ -1,0 +1,13 @@
+## Database ##
+
+database:
+ name: psycopg2
+ txn_limit: 10000
+ args:
+   user: {{ synapse_postgres_dbuser }}
+   password: {{ synapse_postgres_dbpw }}
+   database: {{ synapse_postgres_db }}
+   host: localhost
+   port: 5432
+   cp_min: 5
+   cp_max: 10

@@ -12,11 +12,22 @@ synapse_gpg_keyring: "{{ synapse_name }}_keyring"
 # Needed for Operating the Service
 synapse_service_user: "matrix-synapse"
 synapse_dir: "/opt/{{ synapse_name }}"
+synapse_config_base_dir: "/etc/matrix-synapse"
 synapse_config_dir: "/etc/matrix-synapse/conf.d/"
+synapse_data_dir: "/var/lib/matrix-synapse"
 
 synapse_default_macaroon_secret_key: ""
 synapse_default_form_secret_key: ""
 synapse_default_registration_shared_secret: ""
+
+# Items for Matrix Element
+element_github_version: ""
+element_dir: "/opt/element"
+element_config_base_file: "{{ element_dir}}/config.sample.json"
+element_config_file: "{{ element_dir}}/config.json"
+nginx_user: "www-data"
+element_repo: "vector-im/element-web"
+element_tmp_path: "/tmp/element-web.tar.gz"
 
 # Items for operating the Service`
 synapse_service_path: "/lib/systemd/system/matrix-synapse.service"
@@ -30,18 +41,12 @@ synapse_post_config_command: "./rebuild.sh"
 synapse_start_command: "{{ synapse_dir }}/synapse.sh start"
 synapse_stop_command: "{{ synapse_dir }}/synapse.sh start"
 
-# Items for provisioning the Certificate for the Service
-synapse_inital_cert_location: "/etc/step-ca"
-synapse_dependent_service: ""
-synapse_external_domain: "synapse.example.com"
-synapse_initial_certificate_path: "{{ synapse_inital_cert_location }}/{{ external_domain }}.crt"
-synapse_initial_key_path: "{{ synapse_inital_cert_location }}/{{ external_domain }}.key"
-synapse_certificate_path: "/etc/synapse/certificate.crt"
-synapse_key_path: "/etc/synapse/certificate.key"
-synapse_cert_renewer_path: "/etc/systemd/system/cert-renewer@{{ synapse_dependent_service }}.service.d"
-synapse_cert_timer: cert-renewer@{{ synapse_dependent_service }}.timer""
+# Items for Database
+synapse_postgres_pass_path: "/etc/postgresql/postgres_db_pass.txt"
+synapse_postgres_db: "synapse_db"
+synapse_postgres_dbuser: "synapse_dbuser"
+synapse_postgres_dbpw: ""
 
-# Other App Settings
-synapse_list_data:
-  - 11.22.33.44
-  - 55.66.77.88
+# Recaptcha
+synapse_recaptcha_public_key: ""
+synapse_recaptcha_private_key: ""
